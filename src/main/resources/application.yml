@@ -1,0 +1,19 @@
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092,localhost:9094,localhost:9096
+    consumer:
+      group-id: my-group
+      enable-auto-commit: false
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      # idempotent + exactly‑once safe settings
+      enable-idempotence: true       # avoids duplicates on retry
+      acks: all                      # wait for all replicas
+      retries: 5                     # automatic retry (safe with idempotence)
+      max-in-flight-requests-per-connection: 5   # required ≤5 when idempotence=true
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    listener:
+      ack-mode: manual
